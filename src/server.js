@@ -1,26 +1,27 @@
 import express from 'express';
-//import listEndpoints from 'express-list-endpoints';
 import cors from 'cors';
-// import booksRoutes from './books/index.js';
-// import studentsRoutes from './students/index.js';
-// import filesRoutes from './files/index.js';
-// import {
-// 	badRequestHandler,
-// 	notFoundHandler,
-// 	catchAllHandler,
-// } from './errorHandlers.js';
-// import { getCurrentFolderPath } from './lib/fs-tools.js';
-import blogsRouter from './blogs/index.js';
+import listEndpoints from 'express-list-endpoints';
+import blogPostRouter from './blogPosts/index.js';
+import {
+	notFoundHandler,
+	badRequestHandler,
+	catchAllHandler,
+} from './errorHandlers.js';
 
 const port = 3001;
-
 const server = express();
-server.use(cors());
-// server.use(loggerMiddleware);
-server.use(express.json());
 
-server.use('/blogPosts', blogsRouter);
+server.use(express.json());
+server.use(cors());
+
+server.use('/', blogPostRouter);
+
+console.table(listEndpoints(server));
+
+server.use(notFoundHandler);
+server.use(badRequestHandler);
+server.use(catchAllHandler);
 
 server.listen(port, () => {
-	console.log('SERVER STARTED AT', port);
+	console.log('SERVER STARTED AT ', port);
 });
